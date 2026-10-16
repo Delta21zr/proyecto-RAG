@@ -50,10 +50,10 @@ def run_verification():
     assert max_tokens <= 512, f"Fallo: chunk de {max_tokens} tokens"
     print(f"      -> {len(chunks)} fragmentos generados. Máx tokens: {max_tokens} (límite: 512).")
 
-    print("\n[RESULTADO AUDITORÍA]:")
-    print("  ✔ Cero tráfico saliente a internet confirmado.")
-    print("  ✔ Embeddings 100% locales (HuggingFace Offline).")
-    print("  ✔ Integración con Qdrant y límite de 512 tokens cumplido.")
+    print("\n[RESULTADO AUDITORIA]:")
+    print("  [OK] Cero trafico saliente a internet confirmado.")
+    print("  [OK] Embeddings 100% locales (HuggingFace Offline).")
+    print("  [OK] Integracion con Qdrant y limite de 512 tokens cumplido.")
     print("================================================================")
 
 if __name__ == "__main__":
