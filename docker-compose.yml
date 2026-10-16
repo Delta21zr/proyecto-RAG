@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rag_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-university_rag}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      # Se ejecutan en orden alfabético solo en la primera inicialización del volumen
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-university_rag}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: rag_qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+      - "127.0.0.1:6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  pg_data:
+  qdrant_data:

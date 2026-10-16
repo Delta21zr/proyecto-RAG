@@ -1,0 +1,25 @@
+# Entornos y dependencias
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secretos y configuración local
+.env
+*.env.local
+
+# Artefactos generados / pesados (modelos: python rag/download_models.py)
+rag/models/
+# Archivos subidos por usuarios
+backend/storage/
+
+# Documentos del curso (contienen datos del equipo); quitar esta línea para versionarlos
+docs/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

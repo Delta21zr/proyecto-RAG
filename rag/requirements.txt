@@ -1,0 +1,13 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+qdrant-client
+langchain-core
+langchain-text-splitters
+langchain-huggingface
+langchain-ollama
+sentence-transformers
+transformers
+huggingface_hub
+pypdf
+python-docx
+pytest
