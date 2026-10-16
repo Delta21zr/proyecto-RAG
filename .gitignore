@@ -5,6 +5,8 @@ node_modules/
 __pycache__/
 *.pyc
 .pytest_cache/
+dist/
+frontend/dist/
 
 # Secretos y configuración local
 .env
