@@ -32,6 +32,12 @@ def get_doc(document_id: UUID, user: User = Depends(get_current_user), db: Sessi
     return ctrl.get_document(db, document_id, user)
 
 
+@router.get("/{document_id}/download")
+def download_doc(document_id: UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Descarga el archivo original (PROJ-101). Solo si el usuario puede ver el documento."""
+    return ctrl.download_document(db, document_id, user)
+
+
 @router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_doc(document_id: UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     ctrl.delete_document(db, document_id, user)

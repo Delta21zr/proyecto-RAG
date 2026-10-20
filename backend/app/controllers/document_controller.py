@@ -5,6 +5,7 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import BackgroundTasks, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
@@ -105,6 +106,30 @@ def _get_visible_document(db: Session, document_id: UUID, user: User) -> Documen
 
 def get_document(db: Session, document_id: UUID, user: User) -> DocumentResponse:
     return DocumentResponse.model_validate(_get_visible_document(db, document_id, user))
+
+
+MEDIA_TYPES = {
+    "PDF": "application/pdf",
+    "DOCX": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+
+
+def download_document(db: Session, document_id: UUID, user: User) -> FileResponse:
+    """PROJ-101: descarga autorizada. Mismas reglas de visibilidad que la consulta del documento."""
+    doc = _get_visible_document(db, document_id, user)   # 404 si el usuario no puede verlo
+
+    # Defensa en profundidad: el archivo debe estar dentro del almacenamiento, aunque la ruta venga de la BD.
+    storage = rag_service.storage_dir().resolve()
+    path = Path(doc.file_path).resolve()
+    if storage not in path.parents or not path.is_file():
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "El archivo no está disponible en el servidor.")
+
+    audit.record(db, user.user_id, "DOWNLOAD_DOCUMENT", f"documents/{doc.document_id}",
+                 {"file": doc.file_name, "version": doc.version})
+    db.commit()
+    return FileResponse(path, media_type=MEDIA_TYPES.get(doc.file_type, "application/octet-stream"),
+                        filename=doc.file_name, content_disposition_type="attachment",
+                        headers={"X-Content-Type-Options": "nosniff"})
 
 
 def list_documents(db: Session, user: User, project_id: Optional[UUID], skip: int, limit: int) -> DocumentListResponse:

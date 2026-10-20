@@ -256,6 +256,30 @@ def test_normative_document_by_coordinator_visible_to_all(client, users):
     assert client.get(f"/api/documents/{d['document_id']}", headers=b).status_code == 200
 
 
+def test_authorized_download(client, users):
+    """PROJ-101: solo quien puede ver el documento puede descargarlo; el acceso queda auditado."""
+    a, b, c, adm = (headers(client, users, k) for k in ("res_a", "res_b", "coord", "admin"))
+    pid = make_project(client, a, "Descargas")["project_id"]
+    content = docx_bytes()
+    d = upload(client, a, "bajar.docx", content, pid).json()
+    url = f"/api/documents/{d['document_id']}/download"
+
+    r = client.get(url, headers=a)
+    assert r.status_code == 200 and r.content == content
+    assert "attachment" in r.headers["content-disposition"] and "bajar.docx" in r.headers["content-disposition"]
+    assert r.headers["content-type"].startswith("application/vnd.openxmlformats")
+    assert client.get(url, headers=c).status_code == 200      # coordinador ve todo
+
+    assert client.get(url).status_code == 401                 # sin token
+    assert client.get(url, headers=b).status_code == 404      # otro investigador: no revela existencia
+    assert client.get(url, headers=adm).status_code == 404    # admin no lee contenido restringido
+    assert client.get(f"/api/documents/{uuid.uuid4()}/download", headers=a).status_code == 404
+
+    actor = login(client, users["res_a"]).json()["user"]["user_id"]
+    events = client.get(f"/api/audit/logs?actor_id={actor}&action=DOWNLOAD_DOCUMENT", headers=adm).json()["events"]
+    assert any(e["resource"] == f"documents/{d['document_id']}" for e in events)
+
+
 # ---------------- RAG ----------------
 def test_rag_prefilters_by_authorization_and_persists(client, users, fake):
     a, b = headers(client, users, "res_a"), headers(client, users, "res_b")
