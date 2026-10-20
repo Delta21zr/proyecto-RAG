@@ -1,0 +1,443 @@
+{
+  "current_threshold": 0.86,
+  "top1_accuracy": 1.0,
+  "suggested_threshold": 0.86,
+  "details": [
+    {
+      "id": "A01",
+      "kind": "answerable",
+      "score": 0.9275,
+      "correct_source": true
+    },
+    {
+      "id": "A02",
+      "kind": "answerable",
+      "score": 0.8974,
+      "correct_source": true
+    },
+    {
+      "id": "A03",
+      "kind": "answerable",
+      "score": 0.9284,
+      "correct_source": true
+    },
+    {
+      "id": "A04",
+      "kind": "answerable",
+      "score": 0.9138,
+      "correct_source": true
+    },
+    {
+      "id": "A05",
+      "kind": "answerable",
+      "score": 0.8783,
+      "correct_source": true
+    },
+    {
+      "id": "A06",
+      "kind": "answerable",
+      "score": 0.8737,
+      "correct_source": true
+    },
+    {
+      "id": "A07",
+      "kind": "answerable",
+      "score": 0.9045,
+      "correct_source": true
+    },
+    {
+      "id": "A08",
+      "kind": "answerable",
+      "score": 0.882,
+      "correct_source": true
+    },
+    {
+      "id": "A09",
+      "kind": "answerable",
+      "score": 0.8689,
+      "correct_source": true
+    },
+    {
+      "id": "A10",
+      "kind": "answerable",
+      "score": 0.9112,
+      "correct_source": true
+    },
+    {
+      "id": "A11",
+      "kind": "answerable",
+      "score": 0.8728,
+      "correct_source": true
+    },
+    {
+      "id": "A12",
+      "kind": "answerable",
+      "score": 0.8649,
+      "correct_source": true
+    },
+    {
+      "id": "U01",
+      "kind": "unanswerable",
+      "category": "fuera_de_dominio",
+      "score": 0.7631
+    },
+    {
+      "id": "U02",
+      "kind": "unanswerable",
+      "category": "fuera_de_dominio",
+      "score": 0.7348
+    },
+    {
+      "id": "U03",
+      "kind": "unanswerable",
+      "category": "fuera_de_dominio",
+      "score": 0.7436
+    },
+    {
+      "id": "U04",
+      "kind": "unanswerable",
+      "category": "fuera_de_dominio",
+      "score": 0.8121
+    },
+    {
+      "id": "U05",
+      "kind": "unanswerable",
+      "category": "mismo_dominio_sin_evidencia",
+      "score": 0.8847
+    },
+    {
+      "id": "U06",
+      "kind": "unanswerable",
+      "category": "mismo_dominio_sin_evidencia",
+      "score": 0.8835
+    },
+    {
+      "id": "U07",
+      "kind": "unanswerable",
+      "category": "mismo_dominio_sin_evidencia",
+      "score": 0.832
+    },
+    {
+      "id": "U08",
+      "kind": "unanswerable",
+      "category": "mismo_dominio_sin_evidencia",
+      "score": 0.8418
+    },
+    {
+      "id": "U09",
+      "kind": "unanswerable",
+      "category": "mismo_dominio_sin_evidencia",
+      "score": 0.8709
+    },
+    {
+      "id": "U10",
+      "kind": "unanswerable",
+      "category": "inyeccion_prompt",
+      "score": 0.8156
+    }
+  ],
+  "sweep": [
+    {
+      "threshold": 0.5,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.51,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.52,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.53,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.54,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.55,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.56,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.57,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.58,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.59,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.6,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.61,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.62,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.63,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.64,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.65,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.66,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.67,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.68,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.69,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.7,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.71,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.72,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.73,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.74,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.1,
+      "balanced": 0.55
+    },
+    {
+      "threshold": 0.75,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.2,
+      "balanced": 0.6
+    },
+    {
+      "threshold": 0.76,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.2,
+      "balanced": 0.6
+    },
+    {
+      "threshold": 0.77,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.3,
+      "balanced": 0.65
+    },
+    {
+      "threshold": 0.78,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.3,
+      "balanced": 0.65
+    },
+    {
+      "threshold": 0.79,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.3,
+      "balanced": 0.65
+    },
+    {
+      "threshold": 0.8,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.3,
+      "balanced": 0.65
+    },
+    {
+      "threshold": 0.81,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.3,
+      "balanced": 0.65
+    },
+    {
+      "threshold": 0.82,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.5,
+      "balanced": 0.75
+    },
+    {
+      "threshold": 0.83,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.5,
+      "balanced": 0.75
+    },
+    {
+      "threshold": 0.84,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.6,
+      "balanced": 0.8
+    },
+    {
+      "threshold": 0.85,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.7,
+      "balanced": 0.85
+    },
+    {
+      "threshold": 0.86,
+      "answerable_recall": 1.0,
+      "abstention_rate": 0.7,
+      "balanced": 0.85
+    },
+    {
+      "threshold": 0.87,
+      "answerable_recall": 0.8333333333333334,
+      "abstention_rate": 0.7,
+      "balanced": 0.7666666666666666
+    },
+    {
+      "threshold": 0.88,
+      "answerable_recall": 0.5833333333333334,
+      "abstention_rate": 0.8,
+      "balanced": 0.6916666666666667
+    },
+    {
+      "threshold": 0.89,
+      "answerable_recall": 0.5,
+      "abstention_rate": 1.0,
+      "balanced": 0.75
+    },
+    {
+      "threshold": 0.9,
+      "answerable_recall": 0.4166666666666667,
+      "abstention_rate": 1.0,
+      "balanced": 0.7083333333333334
+    },
+    {
+      "threshold": 0.91,
+      "answerable_recall": 0.3333333333333333,
+      "abstention_rate": 1.0,
+      "balanced": 0.6666666666666666
+    },
+    {
+      "threshold": 0.92,
+      "answerable_recall": 0.16666666666666666,
+      "abstention_rate": 1.0,
+      "balanced": 0.5833333333333334
+    },
+    {
+      "threshold": 0.93,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.94,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.95,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.96,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.97,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.98,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    },
+    {
+      "threshold": 0.99,
+      "answerable_recall": 0.0,
+      "abstention_rate": 1.0,
+      "balanced": 0.5
+    }
+  ],
+  "llm_answer_accuracy": 1.0,
+  "llm_abstention_rate": 1.0
+}

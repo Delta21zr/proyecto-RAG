@@ -23,7 +23,10 @@ MODELS_DIR = Path(os.getenv("MODELS_DIR", BASE_DIR / "models"))  # caché offlin
 
 MAX_CHUNK_TOKENS = 512      # límite estricto por fragmento (incluye prefijo y tokens especiales)
 CHUNK_OVERLAP_TOKENS = 50
-SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.70"))  # AIR-003 / RF-013
+# AIR-003 / RF-013. Calibrado con rag/eval/evaluate.py (TASK-QA-02): con e5-small los scores de preguntas
+# sin evidencia llegan a 0.88, por lo que 0.70 no filtraba nada. 0.86 = mejor balance (100 % recall, 70 % abstencion);
+# la abstencion restante la cubre la instruccion al LLM. Recalibrar al cambiar de modelo o de corpus.
+SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.86"))
 TOP_K = 4
 
 ABSTENTION_MESSAGE = (

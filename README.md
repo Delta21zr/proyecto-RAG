@@ -73,5 +73,6 @@ Get-Content database\validate_indexes.sql | docker exec -i rag_postgres psql -U 
 
 ## Notas
 - `BAAI/bge-small-es` no existe en Hugging Face; se usa `intfloat/multilingual-e5-small` (384 dim). Configurable en `rag/config.py`.
-- El umbral de similitud (0.70) debe calibrarse con preguntas reales.
+- El umbral de similitud (0.86) se calibró con un corpus sintético (`rag/eval/`); debe recalibrarse con documentos y preguntas reales:
+  `cd rag; ..\rag\.venv\Scripts\python.exe eval\evaluate.py [--with-llm]`.
 - Estado: Fases 1–3 (infraestructura, RAG, API) completas. Pendiente: frontend completo (subida de archivos, chat y citas).
