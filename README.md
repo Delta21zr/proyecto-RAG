@@ -52,6 +52,7 @@ Usuarios de desarrollo (`database/seed.sql`), contraseña `Admin123!`:
 | `GET/POST /api/projects` | Listar (según rol) / crear proyecto |
 | `PUT /api/projects/{id}/status` | Flujo `DRAFT → IN_REVIEW → APPROVED/REJECTED → ARCHIVED` |
 | `POST /api/documents` | Sube PDF/DOCX; indexación en segundo plano |
+| `GET /api/documents/{id}/download` | Descarga autorizada del archivo original (RBAC + auditoría) |
 | `POST /api/rag/query` | Consulta con citas y abstención si no hay evidencia |
 | `GET /api/audit/logs` | Auditoría (solo `ADMIN`) |
 

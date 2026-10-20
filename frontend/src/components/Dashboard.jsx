@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiFetch } from '../api';
+import ProjectDocumentsModal from './ProjectDocumentsModal';
 
 export default function Dashboard({ user, onLogout }) {
   const [projects, setProjects] = useState([]);
@@ -21,6 +22,9 @@ export default function Dashboard({ user, onLogout }) {
 
   // ADMIN no crea proyectos (el backend responde 403)
   const canCreate = user?.role === 'RESEARCHER' || user?.role === 'COORDINATOR';
+
+  // undefined = modal cerrado; null = normativa institucional; objeto = proyecto seleccionado
+  const [selectedProjectForDocs, setSelectedProjectForDocs] = useState(undefined);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -140,17 +144,30 @@ export default function Dashboard({ user, onLogout }) {
             <p className="text-sm text-slate-500">Consulta de expedientes y antecedentes documentales</p>
           </div>
 
-          {canCreate && (
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition"
+              type="button"
+              onClick={() => setSelectedProjectForDocs(null)}
+              className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-300 px-3.5 py-2 rounded-lg text-sm font-medium shadow-sm hover:bg-slate-50 transition"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+              <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              Nuevo Proyecto
+              Normativa Institucional
             </button>
-          )}
+
+            {canCreate && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Nuevo Proyecto
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Filtros de búsqueda (RF-010) */}
@@ -234,9 +251,13 @@ export default function Dashboard({ user, onLogout }) {
 
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                   <span>Alta: {new Date(proj.created_at).toLocaleDateString()}</span>
-                  <span className="font-medium text-indigo-600 hover:text-indigo-800 cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProjectForDocs(proj)}
+                    className="font-medium text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                  >
                     Ver Documentos &rarr;
-                  </span>
+                  </button>
                 </div>
               </div>
             ))}
@@ -322,6 +343,16 @@ export default function Dashboard({ user, onLogout }) {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Modal de Documentos y Descargas Autorizadas (PROJ-101) */}
+      {selectedProjectForDocs !== undefined && (
+        <ProjectDocumentsModal
+          project={selectedProjectForDocs}
+          user={user}
+          onClose={() => setSelectedProjectForDocs(undefined)}
+          onLogout={onLogout}
+        />
       )}
     </div>
   );
