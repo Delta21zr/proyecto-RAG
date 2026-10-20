@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiFetch } from '../api';
 
 export default function Dashboard({ user, onLogout }) {
   const [projects, setProjects] = useState([]);
@@ -14,35 +15,38 @@ export default function Dashboard({ user, onLogout }) {
   const [newTitle, setNewTitle] = useState('');
   const [newArea, setNewArea] = useState('');
   const [newDescription, setNewDescription] = useState('');
+  const [newVisibility, setNewVisibility] = useState('RESTRICTED_TEAM');
+  const [modalError, setModalError] = useState('');
   const [creating, setCreating] = useState(false);
+
+  // ADMIN no crea proyectos (el backend responde 403)
+  const canCreate = user?.role === 'RESEARCHER' || user?.role === 'COORDINATOR';
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setNewTitle('');
+    setNewArea('');
+    setNewDescription('');
+    setNewVisibility('RESTRICTED_TEAM');
+    setModalError('');
+  };
 
   // Carga inicial y reactiva de proyectos
   const fetchProjects = async () => {
     setLoading(true);
     setError('');
     try {
-      const token = sessionStorage.getItem('access_token');
-      let url = 'http://localhost:8000/api/projects?skip=0&limit=50';
-      if (statusFilter) url += `&status=${statusFilter}`;
-      if (searchTerm) url += `&area=${encodeURIComponent(searchTerm)}`;
+      let path = '/api/projects?skip=0&limit=50';
+      if (statusFilter) path += `&status=${statusFilter}`;
+      if (searchTerm.trim()) path += `&area=${encodeURIComponent(searchTerm.trim())}`;
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error('Error al obtener la lista de proyectos.');
-      }
-
-      const data = await response.json();
+      const data = await apiFetch(path);
       setProjects(data.projects || []);
     } catch (err) {
+      if (err.status === 401) {
+        onLogout(); // sesión expirada
+        return;
+      }
       setError(err.message || 'Error de comunicación.');
     } finally {
       setLoading(false);
@@ -56,35 +60,27 @@ export default function Dashboard({ user, onLogout }) {
   const handleCreateProject = async (e) => {
     e.preventDefault();
     setCreating(true);
+    setModalError('');
     try {
-      const token = sessionStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/projects', {
+      await apiFetch('/api/projects', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+        body: {
+          title: newTitle.trim(),
+          area: newArea.trim(),
+          description: newDescription.trim() || null,
+          visibility: newVisibility,
         },
-        body: JSON.stringify({
-          title: newTitle,
-          area: newArea,
-          description: newDescription,
-          visibility: 'RESTRICTED_TEAM',
-        }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Fallo al registrar proyecto.');
-      }
-
       // Limpiar formulario y recargar
-      setNewTitle('');
-      setNewArea('');
-      setNewDescription('');
-      setIsModalOpen(false);
+      closeModal();
       fetchProjects();
     } catch (err) {
-      alert(err.message);
+      if (err.status === 401) {
+        onLogout();
+        return;
+      }
+      setModalError(err.message || 'Fallo al registrar proyecto.');
     } finally {
       setCreating(false);
     }
@@ -144,15 +140,17 @@ export default function Dashboard({ user, onLogout }) {
             <p className="text-sm text-slate-500">Consulta de expedientes y antecedentes documentales</p>
           </div>
 
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Nuevo Proyecto
-          </button>
+          {canCreate && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Nuevo Proyecto
+            </button>
+          )}
         </div>
 
         {/* Filtros de búsqueda (RF-010) */}
@@ -287,10 +285,28 @@ export default function Dashboard({ user, onLogout }) {
                 ></textarea>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-slate-700">Visibilidad</label>
+                <select
+                  value={newVisibility}
+                  onChange={(e) => setNewVisibility(e.target.value)}
+                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="RESTRICTED_TEAM">Restringido (solo equipo)</option>
+                  <option value="PUBLIC_INSTITUTIONAL">Público institucional</option>
+                </select>
+              </div>
+
+              {modalError && (
+                <div className="rounded-md bg-rose-50 border border-rose-200 p-3 text-sm text-rose-700">
+                  {modalError}
+                </div>
+              )}
+
               <div className="flex justify-end gap-3 pt-3">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={closeModal}
                   className="px-4 py-2 border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
                   Cancelar

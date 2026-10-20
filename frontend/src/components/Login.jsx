@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiFetch } from '../api';
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -12,20 +13,12 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login', {
+      // RF-001: el backend responde un error genérico para no exponer la existencia de correos
+      const data = await apiFetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        body: { email: email.trim(), password },
+        auth: false,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // RF-001: Error genérico para no exponer existencia de correos
-        throw new Error(data.detail || 'Credenciales incorrectas o cuenta inactiva.');
-      }
 
       // Guardar token y datos de sesión
       sessionStorage.setItem('access_token', data.token);
