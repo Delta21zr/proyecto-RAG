@@ -34,6 +34,8 @@ def _write(actor_id, action, resource, details):
 
 class AuditMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
         response = await call_next(request)
         path = request.url.path
         if path.startswith(SKIP_PREFIXES):

@@ -1,5 +1,9 @@
-// Cliente HTTP compartido. La URL base se configura con VITE_API_URL (por defecto, API local).
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Cliente HTTP compartido. La URL base se configura con VITE_API_URL o el mismo host en puerto 8000.
+export const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:8000`
+    : 'http://localhost:8000');
 
 export class ApiError extends Error {
   constructor(message, status) {
