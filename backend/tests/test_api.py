@@ -288,6 +288,8 @@ def test_rag_prefilters_by_authorization_and_persists(client, users, fake):
 
     r = client.post("/api/rag/query", json={"prompt": "¿qué dice el informe?"}, headers=a)
     assert r.status_code == 200 and not r.json()["abstained"] and r.json()["citations"]
+    cit = r.json()["citations"][0]
+    assert cit["content"] == "Texto de prueba del documento." and cit["version"] == 1
     assert pid in fake.last_allowed
 
     client.post("/api/rag/query", json={"prompt": "¿qué dice el informe?"}, headers=b)
@@ -317,3 +319,39 @@ def test_audit_log_access_and_content(client, users):
 
     blob = str([e["details"] for e in events])
     assert PASSWORD not in blob and "Bearer" not in blob       # nunca se registran secretos
+
+
+# ---------------- Usuarios (Admin) ----------------
+def test_user_management_rbac_and_crud(client, users):
+    a, adm = headers(client, users, "res_a"), headers(client, users, "admin")
+    assert client.get("/api/users", headers=a).status_code == 403
+
+    listed = client.get("/api/users", headers=adm)
+    assert listed.status_code == 200 and listed.json()["total"] >= 5
+
+    new_email = f"nuevo.{SUFFIX}@test.edu"
+    created = client.post("/api/users", json={
+        "email": new_email, "full_name": "Nuevo Investigador", "password": PASSWORD, "role": "RESEARCHER"
+    }, headers=adm)
+    assert created.status_code == 201 and created.json()["email"] == new_email
+    uid = created.json()["user_id"]
+
+    # Duplicado -> 409
+    assert client.post("/api/users", json={
+        "email": new_email, "full_name": "Otro", "password": PASSWORD, "role": "RESEARCHER"
+    }, headers=adm).status_code == 409
+
+    # Actualizar rol y estado
+    upd = client.put(f"/api/users/{uid}", json={"role": "COORDINATOR", "is_active": False}, headers=adm)
+    assert upd.status_code == 200 and upd.json()["role"] == "COORDINATOR" and upd.json()["is_active"] is False
+
+    # Admin no puede desactivarse a sí mismo
+    adm_id = login(client, users["admin"]).json()["user"]["user_id"]
+    assert client.put(f"/api/users/{adm_id}", json={"is_active": False}, headers=adm).status_code == 409
+
+    # Limpieza del usuario creado en esta prueba
+    db = SessionLocal()
+    db.query(AuditEvent).filter(AuditEvent.resource == f"users/{uid}").delete(synchronize_session=False)
+    db.query(User).filter(User.user_id == uid).delete(synchronize_session=False)
+    db.commit()
+    db.close()

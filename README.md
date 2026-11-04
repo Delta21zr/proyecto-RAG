@@ -77,3 +77,8 @@ Get-Content database\validate_indexes.sql | docker exec -i rag_postgres psql -U 
 - El umbral de similitud (0.86) se calibró con un corpus sintético (`rag/eval/`); debe recalibrarse con documentos y preguntas reales:
   `cd rag; ..\rag\.venv\Scripts\python.exe eval\evaluate.py [--with-llm]`.
 - Estado: Fases 1–3 (infraestructura, RAG, API) completas. Pendiente: frontend completo (subida de archivos, chat y citas).
+
+## Respaldo y pruebas de carga
+
+- **Respaldo diario (PROJ-103)**: `scripts\backup_db.ps1` hace `pg_dump` comprimido, lo sube a Google Drive con [rclone](https://rclone.org) (remoto `gdrive`, carpeta `respaldos_rag`) y conserva 14 dias. `-SkipUpload` solo respalda local; `-Register` crea la tarea programada diaria (02:00).
+- **Prueba de carga (PROJ-104)**: `rag\.venv\Scripts\python.exe scripts\load_test_rag.py --users 5 --requests 40` mide latencia de `/api/rag/query` (requiere API, Qdrant y Ollama activos). Aprueba si p95 <= 20 s; genera `scripts/load_test_report.json`.

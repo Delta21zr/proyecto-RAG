@@ -98,7 +98,7 @@ def change_status(db: Session, project_id: UUID, data: ProjectStatusUpdate, user
         raise HTTPException(status.HTTP_403_FORBIDDEN,
                             "Solo un coordinador distinto del responsable puede revisar el proyecto.")
     if data.status == "REJECTED" and not (data.comment and data.comment.strip()):
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "Rechazar un proyecto requiere un comentario.")
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Rechazar un proyecto requiere un comentario.")
 
     previous = project.status
     project.status = data.status

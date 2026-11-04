@@ -35,6 +35,8 @@ class CitationOut(BaseModel):
     page_number: Optional[int]
     paragraph_num: Optional[int]
     score: float
+    content: Optional[str] = None
+    version: Optional[int] = None
 
 
 class RagQueryResponse(BaseModel):
@@ -59,6 +61,7 @@ class AuditEventOut(BaseModel):
 
     event_id: UUID
     actor_id: Optional[UUID]
+    actor_name: Optional[str] = None
     action: str
     resource: str
     details: Any

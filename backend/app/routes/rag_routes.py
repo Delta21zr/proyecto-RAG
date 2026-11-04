@@ -31,9 +31,18 @@ def rag_query(data: RagQueryRequest, user: User = Depends(get_current_user), db:
     db.flush()
 
     # Solo se persisten citas cuyo fragmento exista en BD (puede haber sido eliminado entre medias).
-    existing = {str(f[0]) for f in db.query(DocumentFragment.fragment_id)
-                .filter(DocumentFragment.fragment_id.in_([c["fragment_id"] for c in result["citations"]])).all()}
-    citations = [c for c in result["citations"] if c["fragment_id"] in existing]
+    frag_rows = (db.query(DocumentFragment)
+                 .filter(DocumentFragment.fragment_id.in_([c["fragment_id"] for c in result["citations"]])).all())
+    frag_map = {str(f.fragment_id): f for f in frag_rows}
+    citations = []
+    for c in result["citations"]:
+        f = frag_map.get(str(c["fragment_id"]))
+        if f is not None:
+            citations.append({
+                **c,
+                "content": c.get("content") or f.content,
+                "version": c.get("version") or (f.document.version if f.document else 1),
+            })
     db.add_all(Citation(query_id=q.query_id, fragment_id=c["fragment_id"], relevance_score=c["score"])
                for c in citations)
     audit.record(db, user.user_id, "RAG_QUERY", f"queries/{q.query_id}",

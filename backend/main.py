@@ -7,6 +7,7 @@ from app.routes.auth_routes import router as auth_router
 from app.routes.document_routes import router as document_router
 from app.routes.project_routes import router as project_router
 from app.routes.rag_routes import router as rag_router
+from app.routes.user_routes import router as user_router
 
 # El esquema se gestiona con database/schema.sql (fuente de verdad); no se usa create_all().
 app = FastAPI(
@@ -25,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for r in (auth_router, project_router, document_router, rag_router, audit_router):
+for r in (auth_router, project_router, document_router, rag_router, audit_router, user_router):
     app.include_router(r)
 
 

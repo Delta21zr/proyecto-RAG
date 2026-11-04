@@ -1,6 +1,6 @@
 from pathlib import Path
 from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_SECRET = "CAMBIAR_EN_PRODUCCION_usar_openssl_rand_hex_32"
@@ -24,9 +24,7 @@ class Settings(BaseSettings):
             raise ValueError("BCRYPT_ROUNDS debe ser >= 10")
         return v
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
 settings = Settings()

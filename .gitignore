@@ -25,3 +25,7 @@ docs/
 Thumbs.db
 .idea/
 .vscode/
+
+# Respaldos de BD y reportes de carga
+backups/
+scripts/load_test_report.json

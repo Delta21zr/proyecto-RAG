@@ -147,7 +147,8 @@ class LocalRAGPipeline:
             p = h.payload
             citations.append({"ref": n, "fragment_id": p["fragment_id"], "document_id": p["document_id"],
                               "file_name": p["file_name"], "page_number": p["page_number"],
-                              "paragraph_num": p["paragraph_num"], "score": round(h.score, 4)})
+                              "paragraph_num": p["paragraph_num"], "score": round(h.score, 4),
+                              "content": p.get("content", "")})
             blocks.append(f"[{n}] ({p['file_name']}, pág. {p['page_number']}, párr. {p['paragraph_num']})\n{p['content']}")
 
         # AIR-004: el contexto es DATO inerte, nunca instrucciones.

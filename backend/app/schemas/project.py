@@ -33,6 +33,7 @@ class ProjectResponse(BaseModel):
     project_id: UUID
     title: str
     responsible_id: UUID
+    responsible_name: Optional[str] = None
     area: str
     description: Optional[str]
     status: str

@@ -23,3 +23,7 @@ class Project(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     responsible = relationship("User", backref="projects")
+
+    @property
+    def responsible_name(self) -> str | None:
+        return self.responsible.full_name if self.responsible else None

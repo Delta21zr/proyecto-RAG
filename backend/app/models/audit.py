@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -13,3 +14,9 @@ class AuditEvent(Base):
     resource = Column(String(100), nullable=False)
     details = Column(JSONB, default=dict)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    actor = relationship("User")
+
+    @property
+    def actor_name(self) -> str | None:
+        return self.actor.full_name if self.actor else None
